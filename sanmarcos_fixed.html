@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>San Marcos Charquito — Tacos y Tortas</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --chile: #C0392B;
+    --gold: #E8A020;
+    --avocado: #5A7A3A;
+    --cream: #FAF3E0;
+    --dark: #1A1208;
+    --tortilla: #D4A843;
+    --smoke: #2C1F10;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(26,18,8,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--chile); }
+  .nav-links {
+    display: flex; gap: 0.25rem;
+    list-style: none;
+  }
+  .nav-links li a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+    opacity: 0.7;
+  }
+  .nav-links li a:hover, .nav-links li a.active {
+    opacity: 1;
+    color: var(--gold);
+    background: rgba(232,160,32,0.1);
+  }
+
+  /* PAGES */
+  .page { display: none; min-height: 100vh; padding-top: 64px; }
+  .page.active { display: block; }
+
+  /* ===== HOME PAGE ===== */
+  #home {
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 64px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem 4rem 4rem;
+    z-index: 2;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 7vw, 7rem);
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title .accent { color: var(--chile); }
+  .hero-title .gold { color: var(--gold); }
+
+  .hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--tortilla);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .hero-details p {
+    font-size: 0.82rem;
+    color: rgba(250,243,224,0.6);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero-details p span { color: var(--gold); font-size: 1rem; }
+
+  .hero-cta {
+    display: flex; gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--chile);
+    color: white;
+  }
+  .btn-primary:hover { background: #a93226; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(250,243,224,0.3);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--dark) 0%, transparent 30%);
+    z-index: 1;
+  }
+  .hero-collage {
+    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+  }
+  .hero-collage img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.75) saturate(1.2);
+    transition: filter 0.3s;
+  }
+  .hero-collage img:hover { filter: brightness(0.9) saturate(1.4); }
+  .hero-collage .big-img {
+    grid-row: 1 / 3;
+  }
+
+  /* Big diagonal stripe */
+  .stripe-divider {
+    height: 80px;
+    background: var(--chile);
+    clip-path: polygon(0 0, 100% 40%, 100% 100%, 0 100%);
+    display: flex; align-items: flex-end;
+    padding: 0.5rem 4rem;
+  }
+  .stripe-divider p {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* Features strip */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(232,160,32,0.15);
+    margin: 3rem 3rem 0;
+    border: 1px solid rgba(232,160,32,0.15);
+  }
+  .feature-item {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    background: rgba(26,18,8,0.8);
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-item::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .feature-item:hover::before { transform: scaleX(1); }
+  .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .feature-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .feature-desc {
+    font-size: 0.82rem;
+    color: rgba(250,243,224,0.55);
+    line-height: 1.6;
+  }
+
+  /* Reviews teaser */
+  .review-strip {
+    margin: 3rem;
+    border-left: 3px solid var(--chile);
+    padding: 1.5rem 2rem;
+    background: rgba(192,57,43,0.05);
+  }
+  .review-strip blockquote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+  .review-strip cite {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ===== MENU PAGE ===== */
+  #menu {
+    background: var(--cream);
+    color: var(--dark);
+  }
+
+  .menu-header {
+    background: var(--smoke);
+    padding: 3.5rem 4rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-header::after {
+    content: 'MENÚ';
+    position: absolute;
+    right: 2rem;
+    bottom: -1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: rgba(232,160,32,0.07);
+    pointer-events: none;
+  }
+  .menu-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    letter-spacing: 4px;
+    color: var(--gold);
+  }
+  .menu-header p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: rgba(250,243,224,0.6);
+    margin-top: 0.25rem;
+  }
+  .cash-badge {
+    display: inline-block;
+    background: var(--chile);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .menu-body {
+    padding: 3rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .menu-section { }
+  .menu-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--chile);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--chile);
+    margin-bottom: 1.25rem;
+  }
+
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-bottom: 1px dotted rgba(26,18,8,0.15);
+    transition: background 0.15s;
+  }
+  .menu-item:hover { background: rgba(232,160,32,0.06); }
+  .menu-item-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--dark);
+    flex: 1;
+  }
+  .menu-item-desc {
+    font-size: 0.72rem;
+    color: rgba(26,18,8,0.5);
+    margin-top: 0.1rem;
+  }
+  .menu-item-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: var(--avocado);
+    margin-left: 1rem;
+    white-space: nowrap;
+  }
+
+  .menu-note {
+    grid-column: 1 / -1;
+    background: rgba(192,57,43,0.08);
+    border-left: 3px solid var(--chile);
+    padding: 1rem 1.5rem;
+    font-size: 0.82rem;
+    color: rgba(26,18,8,0.7);
+    font-style: italic;
+  }
+
+  .menu-full-section {
+    grid-column: 1 / -1;
+  }
+  .menu-full-section .menu-items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0 2rem;
+  }
+
+  /* ===== ABOUT PAGE ===== */
+  #about {
+    background: var(--dark);
+  }
+  .about-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 70vh;
+  }
+  .about-img {
+    position: relative;
+    overflow: hidden;
+  }
+  .about-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) saturate(1.1);
+  }
+  .about-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 70%, var(--dark));
+  }
+  .about-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3.5rem 4rem 3rem;
+  }
+  .about-label {
+    font-size: 0.68rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .about-content h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 0.95;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+  .about-content h2 em {
+    font-style: normal;
+    color: var(--chile);
+  }
+  .about-content p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(250,243,224,0.65);
+    margin-bottom: 1.25rem;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: rgba(232,160,32,0.2);
+    margin: 0 3rem;
+  }
+  .stat {
+    background: var(--smoke);
+    padding: 2rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(250,243,224,0.4);
+    margin-top: 0.25rem;
+  }
+
+  .about-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: rgba(232,160,32,0.1);
+    margin: 2px 3rem 3rem;
+  }
+  .about-detail-item {
+    background: var(--dark);
+    padding: 1.75rem 2rem;
+  }
+  .detail-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .detail-value {
+    font-size: 0.9rem;
+    color: var(--cream);
+  }
+
+  /* ===== GALLERY PAGE ===== */
+  #gallery {
+    background: #0f0a04;
+  }
+  .gallery-header {
+    padding: 3.5rem 4rem 2rem;
+  }
+  .gallery-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 4px;
+    color: var(--cream);
+  }
+  .gallery-header h1 span { color: var(--chile); }
+  .gallery-header p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: rgba(250,243,224,0.4);
+  }
+
+  .gallery-grid {
+    padding: 0 3rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+    gap: 6px;
+  }
+  .gallery-item {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item:nth-child(4) { grid-column: span 2; }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, filter 0.3s;
+    filter: brightness(0.8) saturate(1.15);
+  }
+  .gallery-item:hover img { transform: scale(1.06); filter: brightness(0.95) saturate(1.3); }
+  .gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(192,57,43,0);
+    transition: background 0.3s;
+    display: flex; align-items: flex-end;
+    padding: 1.25rem;
+  }
+  .gallery-item:hover .gallery-item-overlay {
+    background: rgba(26,18,8,0.3);
+  }
+
+  /* ===== VISIT PAGE ===== */
+  #visit {
+    background: var(--smoke);
+  }
+  .visit-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 64px);
+  }
+  .visit-left {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .visit-left h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 3px;
+    color: var(--cream);
+    line-height: 0.95;
+    margin-bottom: 2.5rem;
+  }
+  .visit-left h1 span { color: var(--gold); }
+
+  .info-block {
+    margin-bottom: 2rem;
+  }
+  .info-block-label {
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--chile);
+    margin-bottom: 0.5rem;
+  }
+  .info-block-value {
+    font-size: 1rem;
+    color: var(--cream);
+    line-height: 1.6;
+  }
+  .info-block-value a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .hours-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1.5rem;
+    font-size: 0.85rem;
+  }
+  .hours-day { color: rgba(250,243,224,0.5); }
+  .hours-time { color: var(--cream); }
+
+  .visit-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .visit-right img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5) saturate(0.8);
+  }
+  .visit-right-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to left, transparent, var(--smoke) 60%);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero, .about-hero, .visit-layout { grid-template-columns: 1fr; }
+    .hero-right { height: 50vw; }
+    .menu-body { grid-template-columns: 1fr 1fr; padding: 2rem; }
+    .menu-full-section .menu-items-grid { grid-template-columns: 1fr 1fr; }
+    .features { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .gallery-item:nth-child(4) { grid-column: span 1; }
+    nav { padding: 0 1rem; }
+    .nav-logo { font-size: 1.2rem; }
+  }
+  @media (max-width: 600px) {
+    .menu-body { grid-template-columns: 1fr; padding: 1.5rem; }
+    .menu-full-section .menu-items-grid { grid-template-columns: 1fr; }
+    .hero-left { padding: 2.5rem 1.5rem; }
+    .about-stats, .about-details { margin: 0 1.5rem; }
+    .gallery-grid { padding: 0 1rem 2rem; gap: 4px; }
+    .visit-left { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">San <span>Marcos</span></div>
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="showPage('home')">Home</a></li>
+    <li><a href="#" onclick="showPage('menu')">Menu</a></li>
+    <li><a href="#" onclick="showPage('gallery')">Gallery</a></li>
+    <li><a href="#" onclick="showPage('about')">About</a></li>
+    <li><a href="#" onclick="showPage('visit')">Visit</a></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Capitola, California · Est. Authentic</p>
+      <h1 class="hero-title">
+        San<br>
+        <span class="accent">Marcos</span><br>
+        <span class="gold">Charquito</span>
+      </h1>
+      <p class="hero-sub">Tacos y Tortas · Handmade with soul</p>
+      <div class="hero-details">
+        <p><span>📍</span> 718 Capitola Ave, Capitola CA</p>
+        <p><span>⏰</span> Tue–Sun 9 AM–4 PM · Closed Mondays</p>
+        <p><span>💵</span> Cash only · $10–20 per person</p>
+        <p><span>⭐</span> 4.5 stars · 381 reviews</p>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#" onclick="showPage('menu')">View Menu</a>
+        <a class="btn btn-outline" href="#" onclick="showPage('visit')">Find Us</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-collage">
+        <img class="big-img" src="sanmarco9.jpg" alt="San Marcos Charquito entrance sign">
+        <img src="sanmarco7.jpg" alt="San Marcos Taqueria storefront">
+        <img src="sanmarco3.jpg" alt="Shrimp tacos on handmade green tortillas">
+      </div>
+    </div>
+  </div>
+
+  <div class="stripe-divider">
+    <p>HANDMADE TORTILLAS · FRESH DAILY · CASH ONLY</p>
+  </div>
+
+  <div class="features">
+    <div class="feature-item">
+      <div class="feature-icon">🫓</div>
+      <div class="feature-title">Handmade Tortillas</div>
+      <div class="feature-desc">Every tortilla pressed and cooked fresh. The smell alone is worth the trip.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🌮</div>
+      <div class="feature-title">Simple Menu, Big Flavor</div>
+      <div class="feature-desc">Tacos, tortas, burritos — everything made to order with the freshest ingredients.</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🥤</div>
+      <div class="feature-title">Legendary Horchata</div>
+      <div class="feature-desc">"Might be the best horchata I've ever had." — Google reviewer</div>
+    </div>
+  </div>
+
+  <div class="review-strip" style="margin-top:2rem;">
+    <blockquote>"Feels like home. Handmade tortillas, cash only, simple menu but everything is fresh and delicious."</blockquote>
+    <cite>— Ricardo L., Google Reviews ★★★★★</cite>
+  </div>
+  <div style="padding:0 3rem 3rem;">
+    <div style="margin-top:1.5rem;border-left:3px solid var(--avocado);padding:1.5rem 2rem;background:rgba(90,122,58,0.06);">
+      <blockquote style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;color:var(--cream);margin-bottom:0.5rem;">"Fresh baked bread... the restaurant smells amazing!"</blockquote>
+      <cite style="font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--tortilla);">— Google Review ★★★★★</cite>
+    </div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div id="menu" class="page">
+  <div class="menu-header">
+    <h1>Nuestro Menú</h1>
+    <p>Everything made fresh to order · Handmade tortillas daily</p>
+    <span class="cash-badge">💵 Cash Only</span>
+  </div>
+
+  <div class="menu-body">
+
+    <!-- TACOS -->
+    <div class="menu-section">
+      <div class="menu-section-title">🌮 Tacos</div>
+      <div class="menu-item"><div><div class="menu-item-name">Carne Asada</div></div><div class="menu-item-price">$4.50</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Al Pastor</div></div><div class="menu-item-price">$4.50</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Carnitas</div></div><div class="menu-item-price">$4.50</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Pollo Asado</div></div><div class="menu-item-price">$4.50</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Lengua</div><div class="menu-item-desc">Beef tongue</div></div><div class="menu-item-price">$5.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Cabeza</div><div class="menu-item-desc">Beef head</div></div><div class="menu-item-price">$5.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Chorizo</div></div><div class="menu-item-price">$4.50</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Shrimp Taco</div><div class="menu-item-desc">On handmade green tortilla</div></div><div class="menu-item-price">$6.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Fish Taco</div></div><div class="menu-item-price">$5.50</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Veggie Taco</div></div><div class="menu-item-price">$4.00</div></div>
+    </div>
+
+    <!-- TORTAS -->
+    <div class="menu-section">
+      <div class="menu-section-title">🥖 Tortas</div>
+      <div class="menu-item"><div><div class="menu-item-name">Manolo's Torta</div><div class="menu-item-desc">House specialty — fresh baked bread</div></div><div class="menu-item-price">$12.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Carne Asada Torta</div></div><div class="menu-item-price">$11.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Carnitas Torta</div></div><div class="menu-item-price">$11.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Al Pastor Torta</div></div><div class="menu-item-price">$11.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Pollo Torta</div></div><div class="menu-item-price">$11.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Shrimp Torta</div></div><div class="menu-item-price">$13.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Chorizo Torta</div></div><div class="menu-item-price">$11.00</div></div>
+      <div style="margin-top:1rem;padding:0.75rem;background:rgba(26,18,8,0.05);font-size:0.75rem;color:rgba(26,18,8,0.5);font-style:italic;">All tortas served on housemade bread with avocado, beans, crema & salsa</div>
+    </div>
+
+    <!-- BURRITOS & MORE -->
+    <div class="menu-section">
+      <div class="menu-section-title">🌯 Burritos</div>
+      <div class="menu-item"><div><div class="menu-item-name">Carne Asada Burrito</div></div><div class="menu-item-price">$13.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Carnitas Burrito</div></div><div class="menu-item-price">$13.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Al Pastor Burrito</div></div><div class="menu-item-price">$13.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Pollo Burrito</div></div><div class="menu-item-price">$13.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Shrimp Burrito</div></div><div class="menu-item-price">$15.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Veggie Burrito</div></div><div class="menu-item-price">$11.00</div></div>
+
+      <div class="menu-section-title" style="margin-top:1.5rem;">🫔 Quesadillas</div>
+      <div class="menu-item"><div><div class="menu-item-name">Quesadilla w/ Meat</div></div><div class="menu-item-price">$12.00</div></div>
+      <div class="menu-item"><div><div class="menu-item-name">Cheese Quesadilla</div></div><div class="menu-item-price">$8.00</div></div>
+    </div>
+
+    <!-- DRINKS & SIDES full width -->
+    <div class="menu-full-section">
+      <div class="menu-section-title">🥤 Drinks & Sides</div>
+      <div class="menu-items-grid">
+        <div class="menu-item"><div><div class="menu-item-name">Horchata</div><div class="menu-item-desc">Housemade, legendary</div></div><div class="menu-item-price">$4.00</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Agua Fresca</div></div><div class="menu-item-price">$3.50</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Jarritos</div></div><div class="menu-item-price">$3.00</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Rice & Beans</div></div><div class="menu-item-price">$3.50</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Chips & Salsa</div></div><div class="menu-item-price">$3.00</div></div>
+        <div class="menu-item"><div><div class="menu-item-name">Guacamole</div></div><div class="menu-item-price">$3.50</div></div>
+      </div>
+    </div>
+
+    <div class="menu-note">
+      ⚠️ <strong>Cash only.</strong> Prices may vary — please confirm at time of order. Menu items subject to availability. Tortillas made fresh daily on site.
+    </div>
+
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div id="gallery" class="page">
+  <div class="gallery-header">
+    <h1>Fresh. <span>Handmade.</span> Delicious.</h1>
+    <p>A look inside San Marcos Charquito</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="sanmarco3.jpg" alt="Shrimp tacos on green handmade tortillas">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco2.jpg" alt="Carne asada torta with avocado">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco4.jpg" alt="Al pastor tacos">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco5.jpg" alt="Torta with grilled onions">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco_8.jpg" alt="Tacos held up outside the restaurant">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco6.jpg" alt="Outdoor dining spread">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco7.jpg" alt="San Marcos Taqueria storefront">
+    </div>
+    <div class="gallery-item">
+      <img src="sanmarco9.jpg" alt="San Marcos Charquito sign entrance">
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="page">
+  <div class="about-hero">
+    <div class="about-img">
+      <img src="sanmarco9.jpg" alt="San Marcos Charquito entrance">
+    </div>
+    <div class="about-content">
+      <p class="about-label">Our Story</p>
+      <h2>Taste of <em>Home</em> in Capitola</h2>
+      <p>San Marcos Charquito is a beloved taco and torta spot nestled in Capitola, California — a small, vibrant spot that punches well above its weight. What sets it apart? Everything is made from scratch, starting with the tortillas pressed and cooked fresh every single day.</p>
+      <p>The menu is simple by design: tacos, tortas, burritos — done right. The kind of food that makes you feel like you're eating at someone's abuela's kitchen. The space is small, clean, and inviting, with a patio that's perfect for a sunny California lunch.</p>
+      <p>Regulars keep coming back for the al pastor, the carnitas, the legendary horchata, and most of all — the handmade tortillas. Located just around the corner from Gayle's Bakery, it's become a local institution with a 4.5-star rating and a deeply loyal following.</p>
+    </div>
+  </div>
+
+  <div class="about-stats">
+    <div class="stat">
+      <div class="stat-num">4.5★</div>
+      <div class="stat-label">Google Rating</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">381</div>
+      <div class="stat-label">Reviews</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Handmade Tortillas</div>
+    </div>
+  </div>
+
+  <div class="about-details">
+    <div class="about-detail-item">
+      <div class="detail-label">Address</div>
+      <div class="detail-value">718 Capitola Ave, Capitola, CA 95010<br><small style="color:rgba(250,243,224,0.4);">Located in Auto Spa of California</small></div>
+    </div>
+    <div class="about-detail-item">
+      <div class="detail-label">Hours</div>
+      <div class="detail-value">Tue–Sun: 9 AM – 4 PM<br><small style="color:rgba(250,243,224,0.4);">Closed Mondays</small></div>
+    </div>
+    <div class="about-detail-item">
+      <div class="detail-label">Payment</div>
+      <div class="detail-value">Cash Only</div>
+    </div>
+    <div class="about-detail-item">
+      <div class="detail-label">Phone</div>
+      <div class="detail-value"><a href="tel:+18318886697" style="color:var(--gold);">(831) 888-6697</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- VISIT -->
+<div id="visit" class="page">
+  <div class="visit-layout">
+    <div class="visit-left">
+      <h1>Come <span>Find</span> Us</h1>
+
+      <div class="info-block">
+        <div class="info-block-label">Address</div>
+        <div class="info-block-value">
+          718 Capitola Ave<br>
+          Capitola, CA 95010<br>
+          <small style="color:rgba(250,243,224,0.4);">Located in Auto Spa of California</small>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">Hours</div>
+        <div class="hours-grid">
+          <span class="hours-day">Tuesday – Sunday</span>
+          <span class="hours-time">9 AM – 4 PM</span>
+          <span class="hours-day">Monday</span>
+          <span class="hours-time" style="color:var(--chile);">Closed</span>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">Phone</div>
+        <div class="info-block-value"><a href="tel:+18318886697">(831) 888-6697</a></div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">Payment</div>
+        <div class="info-block-value">💵 Cash Only · $10–20 per person</div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-label">Service Options</div>
+        <div class="info-block-value">Dine-in · Takeout · Delivery</div>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=718+Capitola+Ave+Capitola+CA" target="_blank">Get Directions →</a>
+      </div>
+
+      <div style="margin-top:1.5rem;padding:1rem 1.25rem;background:rgba(232,160,32,0.07);border-left:2px solid var(--gold);font-size:0.8rem;color:rgba(250,243,224,0.5);font-style:italic;">
+        Just around the corner from Gayle's Bakery and Rosticceria — the perfect Capitola food tour.
+      </div>
+    </div>
+    <div class="visit-right">
+      <img src="sanmarco7.jpg" alt="San Marcos Taqueria storefront">
+      <div class="visit-right-overlay"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const links = document.querySelectorAll('.nav-links a');
+    const pages = ['home','menu','gallery','about','visit'];
+    links[pages.indexOf(id)].classList.add('active');
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
